@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XO Nights - Nikita Turns 21</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="locked">
+
+<!-- PAGE 0 (NEW) -->
+<section id="page0" class="page active volume-page">
+    <div class="overlay volume-overlay">
+        <h1 class="big-title">Please turn your volume up</h1>
+        <h2>for a full experience 🔊</h2>
+        <button class="primary" id="startBtn">I'm ready</button>
+    </div>
+</section>
+
+<!-- PAGE 1 -->
+<section id="page1" class="page">
+    <div class="overlay">
+        <h1 class="big-title">You're Invited</h1>
+        <h2>X'O Nights: Nikita Turns 21</h2>
+
+        <div class="radio-area" aria-label="Radio tuning game">
+            <p class="radio-hint">Turn the dial to tune the radio to 103.5</p>
+
+            <div id="radioGame" class="radio" role="group" aria-label="Tune the radio to 103.5">
+                <div class="radio-top">
+                    <div class="radio-brand">DAWN FM</div>
+                    <div class="radio-display" aria-live="polite">
+                        <div class="freq-readout"><span id="freqValue">99.5</span> <span class="mhz">MHz</span></div>
+                        <div id="radioMessage" class="radio-message">STATIC… find 103.5</div>
+                    </div>
+                </div>
+
+                <div class="radio-mid">
+                    <div class="radio-scale" aria-hidden="true">
+                        <div class="scale-track"></div>
+                        <div id="radioNeedle" class="scale-needle"></div>
+                        <div class="scale-marks"></div>
+                        <div class="scale-target" title="103.5"></div>
+                    </div>
+                </div>
+
+                <div class="radio-bottom">
+                    <div class="speaker-grill" aria-hidden="true"></div>
+                    <div class="dial-wrap">
+                        <div id="dialKnob" class="dial" aria-hidden="true"></div>
+                        <input id="dialInput" class="dial-input" type="range" min="88.0" max="108.0" step="0.1" value="99.5" aria-label="Tuning dial" />
+                    </div>
+                </div>
+
+                <div class="static-layer" aria-hidden="true"></div>
+            </div>
+
+            <div id="afterTuned" class="after-tuned" aria-hidden="true">
+                <div class="tuned-text">103.5 <span class="dawn">Dawn FM</span> — You’re tuned in.</div>
+            </div>
+
+            <div id="inviteReveal" class="invite-reveal" aria-hidden="true">
+                <div class="wave-layer" aria-hidden="true"></div>
+                <div class="invite-card">
+                    <h3 class="invite-title">XO Nights</h3>
+                    <p class="invite-sub">Nikita Turns 21 • Dawn FM Edition</p>
+                    <p class="invite-small">Scroll unlocks in a moment…</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PAGE 2 -->
+<section id="page2" class="page light-page">
+    <div class="two-column">
+        <div class="left">
+            <img src="showup.jpg" alt="Event Image">
+        </div>
+
+        <div class="right text-left">
+            <h1>Show up!</h1>
+
+            <p><strong>Date:</strong> Saturday, 23rd May 2026</p>
+            <p><strong>Time:</strong> 16:00 for 16:30</p>
+            <p><strong>Address:</strong> 31 Swart Street, Randpark Ridge</p>
+
+            <p class="big-line"><strong>BOYB 🍾</strong></p>
+
+            <br>
+
+            <p><strong>Scroll for more Information</strong></p>
+        </div>
+    </div>
+</section>
+
+<!-- PAGE 3 -->
+<section id="page3" class="page light-page dress-layout">
+    <div class="two-column">
+        <div class="left">
+            <img src="DawnFm.jpg" alt="Dawn FM Album">
+            <p class="tagline">Lost in the station between life and afterlife</p>
+        </div>
+
+        <div class="right text-left">
+            <h1>Dress Code</h1>
+
+            <div class="highlight-box">
+                You have been chosen to represent Dawn Fm
+            </div>
+
+            <ul class="dress-list">
+                <li>Tune into Dawn FM—come dressed in light blue</li>
+                <li>Casual, comfort over beauty</li>
+            </ul>
+
+            <p><strong>Note:</strong> Your top/t-shirt should represent the dress code</p>
+        </div>
+    </div>
+</section>
+
+<!-- PAGE 4 -->
+<section id="page4" class="page light-page contact-layout">
+    <div class="two-column">
+        <div class="left text-left">
+            <h1 class="big-contact">Contact Details</h1>
+            <p>Contact Nikita for more information</p>
+        </div>
+
+        <div class="right text-left">
+            <h2>Phone Number</h2>
+            <p>0813270172</p>
+
+            <p><strong>RSVP:</strong> There is none, you have to come</p>
+        </div>
+    </div>
+
+    <footer class="dark-footer">
+        XO till we overdose
+    </footer>
+</section>
+
+<!-- Audio -->
+<audio id="bgMusic" src="TakeMyBreath.mp3" preload="auto"></audio>
+
+<script src="script.js"></script>
+</body>
+</html>
