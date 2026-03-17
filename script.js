@@ -13,32 +13,161 @@ const afterTuned = document.getElementById("afterTuned");
 const inviteReveal = document.getElementById("inviteReveal");
 const waveFlood = document.getElementById("waveFlood");
 
+// Quiz elements
+const quizOverlay = document.getElementById("quizOverlay");
+const quizStartBtn = document.getElementById("quizStartBtn");
+const quizCloseBtn = document.getElementById("quizCloseBtn");
+const quizStartScreen = document.getElementById("quizStartScreen");
+const quizQuestionsScreen = document.getElementById("quizQuestionsScreen");
+const quizResultScreen = document.getElementById("quizResultScreen");
+const quizBeginBtn = document.getElementById("quizBeginBtn");
+const questionContainer = document.getElementById("questionContainer");
+const currentQSpan = document.getElementById("currentQ");
+const quizNameInput = document.getElementById("quizName");
+const resultHeading = document.getElementById("resultHeading");
+const resultImage = document.getElementById("resultImage");
+const resultDescription = document.getElementById("resultDescription");
+const resultAudio = document.getElementById("resultAudio");
+const tryAgainBtn = document.getElementById("tryAgainBtn");
+const backToInviteBtn = document.getElementById("backToInviteBtn");
+
 const TARGET_FREQ = 103.5;
 
 // Easier tuning (mobile-friendly)
-const SUCCESS_TOLERANCE = 0.12; // still the "success" window
+const SUCCESS_TOLERANCE = 0.12;
 const STATIC_FULL_AT = 1.6;
 
-// Drag sensitivity (bigger = faster turning)
-const DRAG_SENSITIVITY = 0.03; // MHz per pixel drag
+// Drag sensitivity
+const DRAG_SENSITIVITY = 0.03;
 
 const FREQ_MIN = 88.0;
 const FREQ_MAX = 108.0;
 
-// --- SNAP SETTINGS ---
-const SNAP_RANGE = 0.20;        // within ±0.20 of 103.5, start "locking"
-const SNAP_STRENGTH = 0.18;     // 0..1 : higher = more pull per move/frame
-const SNAP_MAX_STEP = 0.08;     // max MHz pulled per update (keeps it gentle)
+// Snap settings
+const SNAP_RANGE = 0.20;
+const SNAP_STRENGTH = 0.18;
+const SNAP_MAX_STEP = 0.08;
 
 let musicStarted = false;
 let tuned = false;
+let musicPausedForQuiz = false;
+let musicCurrentTime = 0;
+
+// Quiz state
+let currentQuestion = 0;
+let userName = "";
+let answers = [];
+let quizActive = false;
+
+// Song data
+const songs = {
+  "how-do-i-make-you-love-me": {
+    name: "How Do I Make You Love Me?",
+    image: "how-do-i-make-you-love-me.jpg",
+    audio: "how-do-i-make-you-love-me.mp3",
+    description: "You're the mysterious one. Introspective, deep, and always searching for connection beyond the surface.",
+    lyric: "I see the real you"
+  },
+  "is-there-someone-else": {
+    name: "Is There Someone Else?",
+    image: "is-there-someone-else.jpg",
+    audio: "is-there-someone-else.mp3",
+    description: "You're the romantic skeptic. Passionate but cautious, you love hard but protect your heart.",
+    lyric: "Cause I wanna be with you forever"
+  },
+  "less-than-zero": {
+    name: "Less Than Zero",
+    image: "less-than-zero.jpg",
+    audio: "less-than-zero.mp3",
+    description: "You're the free spirit. You value your independence and won't be tied down by anything or anyone.",
+    lyric: "I try to fight, but I'd rather be free"
+  },
+  "moth-to-a-flame": {
+    name: "Moth to a Flame",
+    image: "moth-to-a-flame.jpg",
+    audio: "moth-to-a-flame.mp3",
+    description: "You're the irresistible force. Magnetic, alluring, and impossible to ignore. Dangerous but worth it.",
+    lyric: "His love for you is true"
+  },
+  "sacrifice": {
+    name: "Sacrifice",
+    image: "sacrifice.jpg",
+    audio: "sacrifice.mp3",
+    description: "You're the main character. Smooth, confident, and a little dangerous. You own every room you enter.",
+    lyric: "This life is still worth living"
+  }
+};
+
+// Quiz questions
+const questions = [
+  {
+    question: "If you had to pick one guilty-pleasure snack at midnight, what is it?",
+    choices: [
+      { text: "Chips + something spicy", song: "how-do-i-make-you-love-me" },
+      { text: "Ice cream straight from the tub", song: "is-there-someone-else" },
+      { text: "Chocolate/Sweets", song: "less-than-zero" },
+      { text: "A sweet pastry / dessert", song: "moth-to-a-flame" },
+      { text: "None of the above...I'm trying to be healthy", song: "sacrifice" }
+    ]
+  },
+  {
+    question: "Which language would you love to learn just for fun?",
+    choices: [
+      { text: "French", song: "how-do-i-make-you-love-me" },
+      { text: "Spanish", song: "is-there-someone-else" },
+      { text: "Italian", song: "less-than-zero" },
+      { text: "Japanese", song: "moth-to-a-flame" },
+      { text: "German", song: "sacrifice" }
+    ]
+  },
+  {
+    question: "Favorite genre of music",
+    choices: [
+      { text: "Pop", song: "how-do-i-make-you-love-me" },
+      { text: "R&B", song: "is-there-someone-else" },
+      { text: "80's and 90's", song: "less-than-zero" },
+      { text: "Rap", song: "moth-to-a-flame" },
+      { text: "Amapiano", song: "sacrifice" }
+    ]
+  },
+  {
+    question: "Which one of these places would you like to go to for vacation?",
+    choices: [
+      { text: "Tokyo", song: "how-do-i-make-you-love-me" },
+      { text: "New York", song: "is-there-someone-else" },
+      { text: "Rio", song: "less-than-zero" },
+      { text: "Paris", song: "moth-to-a-flame" },
+      { text: "Italy", song: "sacrifice" }
+    ]
+  },
+  {
+    question: "Pick a colour",
+    choices: [
+      { text: "Black", song: "how-do-i-make-you-love-me" },
+      { text: "White", song: "is-there-someone-else" },
+      { text: "Red", song: "less-than-zero" },
+      { text: "Blue", song: "moth-to-a-flame" },
+      { text: "Yellow", song: "sacrifice" }
+    ]
+  },
+  {
+    question: "Pick a Dawn FM lyric",
+    choices: [
+      { text: "How Do I Make You Love Me? – \"I see the real you\"", song: "how-do-i-make-you-love-me" },
+      { text: "Is There Someone Else? – \"Cause I wanna be with you forever\"", song: "is-there-someone-else" },
+      { text: "Less Than Zero – \"I try to fight, but I'd rather be free\"", song: "less-than-zero" },
+      { text: "Moth to a Flame – \"His love for you is true\"", song: "moth-to-a-flame" },
+      { text: "Sacrifice – \"This life is still worth living\"", song: "sacrifice" }
+    ]
+  }
+];
 
 // For knob dragging
 let dragging = false;
 let lastX = 0;
 let currentFreq = parseFloat(dialInput?.value || "99.5");
 
-// Prevent touch scrolling while locked (mobile)
+// Prevent touch scrolling while locked
 function preventScroll(e) {
   if (document.body.classList.contains("locked")) e.preventDefault();
 }
@@ -67,7 +196,6 @@ function startMusic() {
   music.play().catch(() => {});
   musicStarted = true;
 
-  // gentle fade in
   const fade = setInterval(() => {
     if (music.volume < 0.6) {
       music.volume = Math.min(0.6, music.volume + 0.05);
@@ -75,6 +203,22 @@ function startMusic() {
       clearInterval(fade);
     }
   }, 180);
+}
+
+function pauseMusicForQuiz() {
+  if (music && !music.paused) {
+    musicCurrentTime = music.currentTime;
+    music.pause();
+    musicPausedForQuiz = true;
+  }
+}
+
+function resumeMusicFromQuiz() {
+  if (music && musicPausedForQuiz) {
+    music.currentTime = musicCurrentTime;
+    music.play().catch(() => {});
+    musicPausedForQuiz = false;
+  }
 }
 
 /* ---------------- HELPERS ---------------- */
@@ -87,26 +231,20 @@ function mapRange(value, inMin, inMax, outMin, outMax) {
   return outMin + t * (outMax - outMin);
 }
 
-// keeps it to 0.1 steps like a real radio readout
 function quantizeToStep(v, step = 0.1) {
   return Math.round(v / step) * step;
 }
 
 /* ---------------- SNAP LOGIC ---------------- */
 function applySoftSnap(freq) {
-  // If already tuned, do nothing
   if (tuned) return freq;
 
   const dist = TARGET_FREQ - freq;
   const abs = Math.abs(dist);
 
-  // Only snap in a close range
   if (abs > SNAP_RANGE) return freq;
 
-  // Pull a portion of the remaining distance
   let pull = dist * SNAP_STRENGTH;
-
-  // Clamp the pull so it doesn't jump too hard
   pull = clamp(pull, -SNAP_MAX_STEP, SNAP_MAX_STEP);
 
   return freq + pull;
@@ -115,11 +253,7 @@ function applySoftSnap(freq) {
 /* ---------------- RADIO UI ---------------- */
 function setFreq(freq) {
   let next = clamp(freq, FREQ_MIN, FREQ_MAX);
-
-  // Soft snap toward target if close
   next = applySoftSnap(next);
-
-  // Keep 0.1 step increments (matches your UI/slider)
   next = quantizeToStep(next, 0.1);
 
   currentFreq = next;
@@ -134,15 +268,12 @@ function updateRadioUI(freq) {
   const f = Math.round(freq * 10) / 10;
   freqValue.textContent = f.toFixed(1);
 
-  // Knob rotation
   const knobDeg = mapRange(f, FREQ_MIN, FREQ_MAX, -140, 140);
   dialKnob.style.transform = `rotate(${knobDeg}deg)`;
 
-  // Needle position
   const needlePct = mapRange(f, FREQ_MIN, FREQ_MAX, 0, 100);
   radioNeedle.style.left = `${needlePct}%`;
 
-  // Static intensity based on distance
   const dist = Math.abs(f - TARGET_FREQ);
   const staticAmt = clamp(dist / STATIC_FULL_AT, 0, 1);
 
@@ -156,7 +287,6 @@ function updateRadioUI(freq) {
   } else {
     if (!radioMessage) return;
 
-    // Friendlier messaging near target
     if (dist < 0.25) radioMessage.textContent = "Almost… hold it steady";
     else if (dist < 0.8) radioMessage.textContent = "Close… keep tuning";
     else radioMessage.textContent = "STATIC… find 103.5";
@@ -171,20 +301,17 @@ function onTuneSuccess() {
   dialInput?.setAttribute("disabled", "true");
   dialWrap?.classList.add("locked");
 
-  // Force it perfectly
   currentFreq = TARGET_FREQ;
   if (dialInput) dialInput.value = TARGET_FREQ.toFixed(1);
   if (freqValue) freqValue.textContent = TARGET_FREQ.toFixed(1);
 
-  if (radioMessage) radioMessage.textContent = "103.5 Dawn FM — You’re tuned in.";
+  if (radioMessage) radioMessage.textContent = "103.5 Dawn FM — You're tuned in.";
 
-  // Show tuned text
   if (afterTuned) {
     afterTuned.setAttribute("aria-hidden", "false");
     afterTuned.classList.add("show");
   }
 
-  // Start fullscreen radio wave flood
   setTimeout(() => {
     if (waveFlood) {
       waveFlood.setAttribute("aria-hidden", "false");
@@ -192,7 +319,6 @@ function onTuneSuccess() {
     }
   }, 250);
 
-  // Invite begins appearing slowly / glitching
   setTimeout(() => {
     if (inviteReveal) {
       inviteReveal.setAttribute("aria-hidden", "false");
@@ -200,7 +326,6 @@ function onTuneSuccess() {
     }
   }, 650);
 
-  // After flood + reveal moment, unlock scroll
   setTimeout(() => {
     finishGame();
   }, 5200);
@@ -213,7 +338,7 @@ dialInput?.addEventListener("input", (e) => {
   setFreq(v);
 });
 
-/* ---------------- SMOOTH KNOB DRAG (mobile-friendly) ---------------- */
+/* ---------------- SMOOTH KNOB DRAG ---------------- */
 function getClientX(evt) {
   if (evt.touches && evt.touches[0]) return evt.touches[0].clientX;
   if (typeof evt.clientX === "number") return evt.clientX;
@@ -227,7 +352,6 @@ function startDrag(evt) {
 
   dialWrap?.classList.add("dragging");
 
-  // keep pointer captured on desktop
   if (evt.pointerId && dialWrap?.setPointerCapture) {
     try { dialWrap.setPointerCapture(evt.pointerId); } catch {}
   }
@@ -240,7 +364,6 @@ function moveDrag(evt) {
   const dx = x - lastX;
   lastX = x;
 
-  // Drag right = increase frequency, drag left = decrease
   const next = currentFreq + (dx * DRAG_SENSITIVITY);
   setFreq(next);
 }
@@ -252,7 +375,6 @@ function endDrag() {
 }
 
 if (dialWrap) {
-  // Pointer events (best for modern devices)
   dialWrap.addEventListener("pointerdown", (e) => {
     e.preventDefault();
     startDrag(e);
@@ -267,7 +389,6 @@ if (dialWrap) {
   window.addEventListener("pointerup", endDrag);
   window.addEventListener("pointercancel", endDrag);
 
-  // Touch fallback
   dialWrap.addEventListener("touchstart", (e) => {
     e.preventDefault();
     startDrag(e);
@@ -282,7 +403,7 @@ if (dialWrap) {
   window.addEventListener("touchend", endDrag);
 }
 
-/* ---------------- FINISH: enable scroll from Page 2 -> end ---------------- */
+/* ---------------- FINISH ---------------- */
 function finishGame() {
   document.body.classList.remove("locked");
   document.body.classList.add("scroll-mode");
@@ -292,3 +413,215 @@ function finishGame() {
     page2?.scrollIntoView({ behavior: "smooth" });
   }, 250);
 }
+
+/* ---------------- QUIZ FUNCTIONS ---------------- */
+function openQuiz() {
+  pauseMusicForQuiz();
+  quizOverlay.setAttribute("aria-hidden", "false");
+  quizOverlay.classList.add("active");
+  quizActive = true;
+  
+  // Reset quiz state
+  currentQuestion = 0;
+  answers = [];
+  userName = "";
+  quizNameInput.value = "";
+  
+  // Show start screen, hide others
+  quizStartScreen.style.display = "block";
+  quizQuestionsScreen.style.display = "none";
+  quizResultScreen.style.display = "none";
+  
+  // Stop any playing result audio
+  resultAudio.pause();
+  resultAudio.currentTime = 0;
+}
+
+function closeQuiz() {
+  quizOverlay.setAttribute("aria-hidden", "true");
+  quizOverlay.classList.remove("active");
+  quizActive = false;
+  
+  // Stop result audio
+  resultAudio.pause();
+  resultAudio.currentTime = 0;
+  
+  resumeMusicFromQuiz();
+}
+
+function beginQuiz() {
+  userName = quizNameInput.value.trim() || "Guest";
+  
+  if (!userName) {
+    alert("Please enter your name!");
+    return;
+  }
+  
+  quizStartScreen.style.display = "none";
+  quizQuestionsScreen.style.display = "block";
+  showQuestion(0);
+}
+
+function showQuestion(index) {
+  currentQuestion = index;
+  currentQSpan.textContent = index + 1;
+  
+  const q = questions[index];
+  
+  let html = `
+    <div class="question-box">
+      <h3 class="question-text">${q.question}</h3>
+      <div class="choices-container">
+  `;
+  
+  q.choices.forEach((choice, i) => {
+    html += `
+      <button class="choice-btn" data-song="${choice.song}" data-index="${i}">
+        ${choice.text}
+      </button>
+    `;
+  });
+  
+  html += `
+      </div>
+    </div>
+    <div class="quiz-nav">
+      ${index > 0 ? '<button class="nav-btn prev-btn" id="prevBtn">Previous</button>' : '<div></div>'}
+      ${index === questions.length - 1 ? 
+        '<button class="nav-btn reveal-btn" id="revealBtn" style="display: none;">Reveal my song</button>' : 
+        '<button class="nav-btn next-btn" id="nextBtn" style="display: none;">Next</button>'}
+    </div>
+  `;
+  
+  questionContainer.innerHTML = html;
+  
+  // Add click handlers
+  document.querySelectorAll(".choice-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      // Remove selected from all
+      document.querySelectorAll(".choice-btn").forEach(b => b.classList.remove("selected"));
+      // Add selected to clicked
+      e.target.classList.add("selected");
+      
+      // Store answer
+      answers[index] = e.target.dataset.song;
+      
+      // Show next/reveal button
+      if (index === questions.length - 1) {
+        document.getElementById("revealBtn").style.display = "inline-block";
+      } else {
+        document.getElementById("nextBtn").style.display = "inline-block";
+      }
+    });
+  });
+  
+  // Next button
+  const nextBtn = document.getElementById("nextBtn");
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      showQuestion(index + 1);
+    });
+  }
+  
+  // Previous button
+  const prevBtn = document.getElementById("prevBtn");
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      showQuestion(index - 1);
+    });
+  }
+  
+  // Reveal button
+  const revealBtn = document.getElementById("revealBtn");
+  if (revealBtn) {
+    revealBtn.addEventListener("click", () => {
+      showResult();
+    });
+  }
+  
+  // Restore previous selection if exists
+  if (answers[index]) {
+    const prevBtn = document.querySelector(`[data-song="${answers[index]}"]`);
+    if (prevBtn) {
+      prevBtn.classList.add("selected");
+      if (index === questions.length - 1) {
+        document.getElementById("revealBtn").style.display = "inline-block";
+      } else {
+        document.getElementById("nextBtn").style.display = "inline-block";
+      }
+    }
+  }
+}
+
+function showResult() {
+  // Calculate result
+  const songCounts = {};
+  answers.forEach(song => {
+    songCounts[song] = (songCounts[song] || 0) + 1;
+  });
+  
+  // Find song with max count
+  let maxCount = 0;
+  let resultSong = "";
+  
+  for (const [song, count] of Object.entries(songCounts)) {
+    if (count > maxCount) {
+      maxCount = count;
+      resultSong = song;
+    }
+  }
+  
+  // If tie, pick first in answers
+  if (!resultSong) resultSong = answers[0];
+  
+  const songData = songs[resultSong];
+  
+  // Update UI
+  resultHeading.textContent = `${userName}, you Are ${songData.name}`;
+  resultImage.src = songData.image;
+  resultImage.alt = songData.name;
+  resultDescription.textContent = songData.description;
+  
+  // Set up audio
+  resultAudio.src = songData.audio;
+  
+  // Switch screens
+  quizQuestionsScreen.style.display = "none";
+  quizResultScreen.style.display = "block";
+  
+  // Play audio
+  resultAudio.play().catch(() => {});
+  
+  // Scroll to show result
+  setTimeout(() => {
+    quizResultScreen.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 100);
+}
+
+function tryAgain() {
+  // Reset and go back to start
+  currentQuestion = 0;
+  answers = [];
+  resultAudio.pause();
+  resultAudio.currentTime = 0;
+  
+  quizResultScreen.style.display = "none";
+  quizStartScreen.style.display = "block";
+  quizNameInput.value = userName;
+}
+
+/* ---------------- QUIZ EVENT LISTENERS ---------------- */
+quizStartBtn?.addEventListener("click", openQuiz);
+quizCloseBtn?.addEventListener("click", closeQuiz);
+quizBeginBtn?.addEventListener("click", beginQuiz);
+tryAgainBtn?.addEventListener("click", tryAgain);
+backToInviteBtn?.addEventListener("click", () => {
+  closeQuiz();
+});
+
+// Close on overlay click
+quizOverlay?.addEventListener("click", (e) => {
+  if (e.target === quizOverlay) {
+    closeQuiz();
+  }
+});
