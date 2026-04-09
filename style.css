@@ -19,18 +19,14 @@ html, body {
   width: 100%;
   min-height: 100vh;
   padding: 40px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-
-  transform: scale(1.02);
-  transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+  transform: scale(0.98);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .page.active {
@@ -38,57 +34,98 @@ html, body {
   visibility: visible;
   pointer-events: auto;
   transform: scale(1);
-  z-index: 2;
 }
 
-/* ---------------- PAGE 0 (Volume) ---------------- */
-.volume-page {
-  background: url("background.jpg") no-repeat center center/cover;
-  color: white;
+/* Page 1 fade before scrolling reveal */
+#page1.fade-out{
+  opacity: 0 !important;
+  transform: scale(0.995);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.volume-overlay h2{
-  margin-top: 10px;
-  opacity: 0.95;
+/* ---------------- LOCK + SCROLL MODES ---------------- */
+body.locked{
+  height: 100vh;
+  overflow: hidden;
 }
 
-/* ---------------- PAGE 1 ---------------- */
-#page1 {
-  background: url("weeknd-bg.jpg") no-repeat center center/cover;
-  color: white;
+body.scroll-mode{
+  background: #e5e5e5;
+  overflow-y: auto;
 }
 
-.overlay {
-  background: rgba(0,0,0,0.6);
+body.scroll-mode #page0,
+body.scroll-mode #page1{
+  display: none;
+}
+
+body.scroll-mode .page{
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition: none;
   padding: 40px;
-  border-radius: 15px;
-  text-align: center;
-  width: min(720px, 92vw);
 }
 
-.big-title {
-  font-size: 5rem;
-  margin-bottom: 10px;
-}
-
-.event-title {
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-/* ---------------- RADIO GAME ---------------- */
-.radio-area{
-  margin-top: 26px;
+body.scroll-mode #page2,
+body.scroll-mode #page3,
+body.scroll-mode #page4{
   display: flex;
-  flex-direction: column;
-  gap: 14px;
-  align-items: center;
+}
+
+body.scroll-mode #page4{
+  padding-bottom: 0;
+}
+
+/* ---------------- PAGE 0: VOLUME ---------------- */
+.volume-page{
+  background: url("background.jpg") no-repeat center center/cover;
+}
+
+.volume-overlay{
+  text-align: center;
+  color: white;
+}
+
+.primary{
+  margin-top: 20px;
+  padding: 14px 22px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background: white;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+  touch-action: manipulation;
+}
+
+/* ---------------- PAGE 1: RADIO GAME ---------------- */
+#page1{
+  background: url("weeknd-bg.jpg") no-repeat center center/cover;
+}
+
+.overlay{
+  text-align: center;
+  color: white;
+}
+
+.big-title{
+  font-size: 36px;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+/* Radio game specific styles */
+.radio-area{
+  margin-top: 20px;
 }
 
 .radio-hint{
-  font-size: 1.35rem;
-  opacity: 0.95;
+  font-size: 18px;
+  margin-bottom: 14px;
 }
 
 .radio{
@@ -102,6 +139,7 @@ html, body {
   border: 1px solid rgba(255,255,255,0.08);
   box-shadow: 0 22px 50px rgba(0,0,0,0.55);
   overflow: hidden;
+  margin: 0 auto;
 }
 
 .radio::before{
@@ -234,11 +272,9 @@ html, body {
   width: 180px;
   display: grid;
   place-items: center;
-
   border-radius: 18px;
   background: rgba(0,0,0,0.18);
   border: 1px solid rgba(255,255,255,0.07);
-
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
@@ -324,6 +360,7 @@ html, body {
   opacity: 0;
   transform: translateY(-6px);
   transition: opacity 420ms ease, transform 420ms ease;
+  margin: 14px auto 0;
 }
 
 .after-tuned.show{
@@ -348,7 +385,7 @@ html, body {
 .invite-reveal{
   position: relative;
   width: min(720px, 92vw);
-  margin-top: 8px;
+  margin: 8px auto 0;
   opacity: 0;
   transform: translateY(8px);
   filter: blur(1.2px);
@@ -429,7 +466,6 @@ html, body {
   100%{ transform: translateX(-10px) rotate(0.2deg); }
 }
 
-/* ---------------- FULLSCREEN LIGHT BLUE WAVE FLOOD ---------------- */
 .wave-flood{
   position: fixed;
   inset: 0;
@@ -477,116 +513,149 @@ html, body {
 }
 
 /* ---------------- LIGHT PAGES ---------------- */
-.light-page {
-  background-color: #e5e5e5;
+.light-page{
+  background: #e5e5e5;
   color: black;
 }
 
-/* ---------------- TWO COLUMN LAYOUT ---------------- */
-.two-column {
+.two-column{
   display: flex;
-  justify-content: space-between;
+  gap: 20px;
+  width: min(960px, 92vw);
   align-items: center;
+  justify-content: center;
+}
+
+.left, .right{
+  flex: 1;
+}
+
+.left img{
   width: 100%;
-  gap: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
 }
 
-.two-column .left,
-.two-column .right {
-  width: 45%;
+.text-left{
+  text-align: left;
 }
 
-.text-left { text-align: left; }
-
-.two-column img {
-  width: 100%;
-  border-radius: 8px;
-}
-
-.big-line {
-  font-size: 1.3rem;
+.big-line{
+  font-size: 20px;
   margin-top: 12px;
 }
 
-/* ---------------- PAGE 3 ---------------- */
-.tagline {
-  margin-top: 15px;
-  font-style: italic;
+.tagline{
   text-align: center;
+  margin-top: 10px;
+  opacity: 0.9;
   font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.3px;
 }
 
-.dress-code-title {
-  font-size: 2.2rem;
-  margin-bottom: 15px;
+.highlight-box{
+  background: rgba(0,0,0,0.06);
+  padding: 14px;
+  border-radius: 14px;
+  margin: 14px 0;
+  border: 1px solid rgba(0,0,0,0.35);
 }
 
-.highlight-box {
-  background-color: #d6d6d6;
-  padding: 10px 15px;
-  border-radius: 5px;
-  display: inline-block;
-  margin: 10px 0 14px;
-  border: 1px solid #000;
-  font-weight: 500;
+.dress-list{
+  margin-left: 18px;
+  line-height: 1.8;
 }
 
-.dress-list { padding-left: 20px; }
-.dress-list li { margin-bottom: 8px; }
-
-.scroll-hint {
-  font-size: 1.1rem;
-  margin-top: 20px;
+/* Page 3 Note and Keep Scrolling styles */
+.note-text{
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
-/* ---------------- PAGE 4 / CONTACT ---------------- */
-.big-contact { font-size: 3rem; margin-bottom: 8px; }
+.keep-scrolling{
+  font-size: 18px;
+  margin-top: 8px;
+}
 
-/* Page 4 layout improvements */
-#page4 {
+/* ---------------- CONTACT PAGE ---------------- */
+.big-contact{
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+/* ---------------- UPDATED FOOTER STYLES ---------------- */
+#page4{
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
   gap: 0;
   min-height: 100vh;
+  padding: 0;
 }
 
-#page4 .page4-content {
+#page4 .page4-content{
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px;
   padding-bottom: 18px;
 }
 
-/* Contact lines styling (like Kiss Land) */
-.contact-lines {
+.dark-footer{
+  text-align: center;
+  padding: 18px 0;
+  background: #111;
+  color: white;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  position: relative;
+  left: 50%;
+  right: 50%;
+  transform: translateX(-50%);
+  flex-shrink: 0;
+}
+
+.contact-lines{
   margin-top: 10px;
 }
 
-.contact-line {
+.contact-line{
   display: grid;
   grid-template-columns: auto 14px 1fr;
   column-gap: 8px;
   align-items: baseline;
-  margin: 10px 0;
+  margin: 8px 0;
   font-size: 18px;
   line-height: 1.35;
 }
 
-.contact-line .label,
-.contact-line .colon {
+.contact-line .label{
   font-weight: 800;
   white-space: nowrap;
 }
 
-.contact-line .value {
+.contact-line .colon{
+  font-weight: 800;
+  text-align: center;
+}
+
+.contact-line .value{
   font-weight: 400;
 }
 
-/* ---------------- QUIZ TEASER (Page 4) ---------------- */
-.quiz-teaser {
+@media (max-width: 480px){
+  .contact-line{
+    font-size: 16px;
+    grid-template-columns: auto 12px 1fr;
+  }
+}
+
+/* ---------------- QUIZ TEASER ---------------- */
+.quiz-teaser{
   margin-top: 26px;
   padding: 16px 14px;
   border-radius: 16px;
@@ -595,38 +664,35 @@ html, body {
   text-align: center;
 }
 
-.quiz-teaser-title {
+.quiz-teaser-title{
   font-size: 16px;
   margin-bottom: 8px;
 }
 
-.quiz-teaser-sub {
+.quiz-teaser-sub{
   font-size: 14px;
   opacity: 0.85;
   margin-bottom: 12px;
 }
 
-.quiz-play-btn {
+.quiz-play-btn{
   padding: 12px 18px;
   border-radius: 999px;
   border: 1px solid rgba(0,0,0,0.18);
   background: rgba(0,0,0,0.08);
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
 }
 
-.quiz-play-btn:hover {
+.quiz-play-btn:hover{
   background: rgba(0,0,0,0.12);
-  transform: scale(1.05);
 }
 
-/* ---------------- QUIZ OVERLAY (Kiss Land Style) ---------------- */
-body.quiz-open {
+/* ---------------- QUIZ ---------------- */
+body.quiz-open{
   overflow: hidden !important;
 }
 
-.quiz-screen {
+.quiz-screen{
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -638,18 +704,18 @@ body.quiz-open {
   padding: 24px 0;
 }
 
-body.quiz-open .quiz-screen {
+body.quiz-open .quiz-screen{
   display: flex;
 }
 
-.quiz-inner {
+.quiz-inner{
   width: min(780px, 92vw);
   margin: 0 auto;
   position: relative;
-  padding: 18px 0 60px;
+  padding: 18px 0 40px;
 }
 
-.quiz-back-btn {
+.quiz-back-btn{
   border: 1px solid rgba(255,255,255,0.22);
   background: rgba(255,255,255,0.10);
   color: #fff;
@@ -657,15 +723,9 @@ body.quiz-open .quiz-screen {
   border-radius: 12px;
   cursor: pointer;
   margin-bottom: 18px;
-  font-weight: 600;
-  transition: all 0.3s ease;
 }
 
-.quiz-back-btn:hover {
-  background: rgba(255,255,255,0.20);
-}
-
-.quiz-title {
+.quiz-title{
   font-size: 26px;
   letter-spacing: 0.3px;
   margin-bottom: 6px;
@@ -673,36 +733,36 @@ body.quiz-open .quiz-screen {
   text-shadow: 0 1px 10px rgba(0,0,0,0.25);
 }
 
-.quiz-subtitle {
+.quiz-subtitle{
   opacity: 0.9;
   margin-bottom: 18px;
   color: #fff;
 }
 
-.quiz-album {
+.quiz-album{
   opacity: 0.95;
   letter-spacing: 1px;
 }
 
-.quiz-form {
+.quiz-form{
   display: grid;
   gap: 14px;
 }
 
-.quiz-q {
+.quiz-q{
   padding: 16px;
   border-radius: 16px;
   background: rgba(255,255,255,0.12);
   border: 1px solid rgba(255,255,255,0.18);
 }
 
-.quiz-q h3 {
+.quiz-q h3{
   margin-bottom: 10px;
   font-size: 15px;
   color: #fff;
 }
 
-.quiz-name {
+.quiz-name{
   width: 100%;
   padding: 12px 12px;
   border-radius: 12px;
@@ -713,11 +773,11 @@ body.quiz-open .quiz-screen {
   font-size: 16px;
 }
 
-.quiz-name::placeholder {
+.quiz-name::placeholder{
   color: rgba(255,255,255,0.75);
 }
 
-.quiz-q label {
+.quiz-q label{
   display: block;
   padding: 10px 10px;
   margin: 8px 0;
@@ -727,20 +787,14 @@ body.quiz-open .quiz-screen {
   cursor: pointer;
   user-select: none;
   color: rgba(255,255,255,0.95);
-  transition: all 0.2s ease;
 }
 
-.quiz-q label:hover {
-  background: rgba(0,0,0,0.25);
-  border-color: rgba(255,255,255,0.30);
-}
-
-.quiz-q input[type="radio"] {
+.quiz-q input[type="radio"]{
   margin-right: 10px;
   transform: translateY(1px);
 }
 
-.quiz-finish-btn {
+.quiz-finish-btn{
   margin-top: 4px;
   padding: 12px 16px;
   border-radius: 14px;
@@ -750,19 +804,13 @@ body.quiz-open .quiz-screen {
   cursor: pointer;
   font-size: 18px;
   font-weight: 700;
-  transition: all 0.3s ease;
 }
 
-.quiz-finish-btn:hover {
-  background: rgba(255,255,255,0.25);
-}
-
-.quiz-finish-btn:active {
+.quiz-finish-btn:active{
   transform: scale(0.99);
 }
 
-/* Quiz Result */
-.quiz-result {
+.quiz-result{
   display: none;
   margin-top: 16px;
   padding: 16px;
@@ -773,51 +821,44 @@ body.quiz-open .quiz-screen {
   overflow: hidden;
 }
 
-.quiz-result-inner h2 {
+.quiz-result-inner h2{
   font-size: 20px;
   margin-bottom: 6px;
   color: #fff;
 }
 
-.quiz-result-inner h2 span {
-  color: rgba(120,195,255,0.95);
-  font-weight: 800;
-}
-
-.fade-soft {
+.fade-soft{
   opacity: 0;
   transform: translateY(6px);
   transition: opacity 700ms ease, transform 700ms ease;
 }
 
-.fade-soft.show {
+.fade-soft.show{
   opacity: 1;
   transform: translateY(0);
 }
 
-.result-cover {
+.result-cover{
   width: min(360px, 86vw);
   margin-top: 14px;
   border-radius: 18px;
   display: none;
   border: 1px solid rgba(255,255,255,0.18);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-.result-cover.show {
+.result-cover.show{
   display: block;
 }
 
-.result-blurb {
+.result-blurb{
   margin-top: 10px;
   font-size: 15px;
   line-height: 1.45;
   color: rgba(255,255,255,0.95);
   opacity: 0.95;
-  font-style: italic;
 }
 
-.quiz-result-actions {
+.quiz-result-actions{
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
@@ -825,23 +866,16 @@ body.quiz-open .quiz-screen {
 }
 
 .quiz-retry-btn,
-.quiz-close-btn {
+.quiz-close-btn{
   padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.18);
   background: rgba(255,255,255,0.12);
   color: #fff;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
 }
 
-.quiz-retry-btn:hover,
-.quiz-close-btn:hover {
-  background: rgba(255,255,255,0.22);
-}
-
-.quiz-overlay {
+.quiz-overlay{
   pointer-events: none;
   position: absolute;
   inset: 0;
@@ -850,114 +884,43 @@ body.quiz-open .quiz-screen {
   transition: opacity 0.5s ease;
 }
 
-.quiz-overlay.on {
+.quiz-overlay.on{
   opacity: 1;
 }
 
-/* ---------------- FOOTER ---------------- */
-.dark-footer {
-  width: 100%;
-  background: black;
-  color: white;
-  padding: 15px 0;
-  text-align: center;
-  font-weight: bold;
-  font-size: 2rem;
-  font-family: Rockwell, "Times New Roman", serif;
-  margin-top: auto;
+@media (max-width: 480px){
+  .quiz-title{
+    font-size: 22px;
+  }
+  .quiz-q{
+    padding: 14px;
+  }
+  .quiz-q label{
+    padding: 10px;
+  }
 }
 
-/* ---------------- SCROLL MODE ---------------- */
-body.locked {
-  height: 100vh;
-  overflow: hidden;
+.is-hidden{
+  display: none !important;
 }
 
-body.scroll-mode {
-  background: #e5e5e5;
-  overflow-y: auto;
-}
-
-body.scroll-mode #page0,
-body.scroll-mode #page1 {
-  display: none;
-}
-
-body.scroll-mode .page {
-  position: relative;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: none;
-  transition: none;
-  padding: 40px;
-}
-
-body.scroll-mode #page2,
-body.scroll-mode #page3,
-body.scroll-mode #page4 {
-  display: flex;
-}
-
-body.scroll-mode #page4 {
-  padding-bottom: 0;
-  flex-direction: column;
-}
-
-/* ---------------- MOBILE ---------------- */
+/* ---------------- MOBILE RESPONSIVE ---------------- */
 @media (max-width: 768px) {
   .page {
     padding: 20px;
     min-height: 100vh;
   }
 
-  .overlay { padding: 26px; }
-
-  .big-title { font-size: 2.4rem; }
-
-  .radio-hint {
-    font-size: 1.05rem;
-    line-height: 1.25;
+  #page4 .page4-content{
+    padding: 20px;
+    padding-bottom: 18px;
   }
 
-  .radio-bottom {
-    grid-template-columns: 1fr 170px;
-  }
-
-  .speaker-grill { height: 78px; }
-
-  .dial-wrap {
-    width: 170px;
-    height: 138px;
-  }
-
-  .dial {
-    width: 104px;
-    height: 104px;
-  }
-
-  .two-column {
+  .two-column{
     flex-direction: column;
-    gap: 22px;
   }
 
-  .two-column .left,
-  .two-column .right {
-    width: 100%;
-  }
-
-  h1 { font-size: 1.3rem; }
-  h2 { font-size: 1.1rem; }
-  h3 { font-size: 2rem; }
-
-  .quiz-title { font-size: 22px; }
-  .quiz-q { padding: 14px; }
-  .quiz-q label { padding: 10px; }
-
-  .dress-code-title { font-size: 1.8rem; }
-
-  .contact-line {
-    font-size: 16px;
-    grid-template-columns: auto 12px 1fr;
+  .big-title{
+    font-size: 30px;
   }
 }
