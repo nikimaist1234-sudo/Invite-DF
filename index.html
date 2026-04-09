@@ -22,14 +22,14 @@
   <section id="page1" class="page">
     <div class="overlay">
       <h1 class="big-title">You're Invited</h1>
-      <h2 class="event-title">X'O Nights: Nikita Turns 21</h2>
+      <h2>X'O Nights: Nikita Turns 21</h2>
 
       <div class="radio-area" aria-label="Radio tuning game">
         <p class="radio-hint">Swipe left to tune the radio to 103.5</p>
 
         <div id="radioGame" class="radio" role="group" aria-label="Tune the radio to 103.5">
           <div class="radio-top">
-            <div class="radio-brand">DAWN FM</div>
+            <div class="radio-brand">The Weeknd</div>
             <div class="radio-display" aria-live="polite">
               <div class="freq-readout">
                 <span id="freqValue">99.5</span> <span class="mhz">MHz</span>
@@ -50,11 +50,9 @@
           <div class="radio-bottom">
             <div class="speaker-grill" aria-hidden="true"></div>
 
-            <!-- Bigger touch/drag zone -->
             <div id="dialWrap" class="dial-wrap" aria-label="Dial area">
               <div id="dialKnob" class="dial" aria-hidden="true"></div>
 
-              <!-- Hidden but kept for accessibility + fallback -->
               <input
                 id="dialInput"
                 class="dial-input"
@@ -88,7 +86,6 @@
       </div>
     </div>
 
-    <!-- FULLSCREEN FLOOD -->
     <div id="waveFlood" class="wave-flood" aria-hidden="true"></div>
   </section>
 
@@ -109,6 +106,7 @@
         <p class="big-line"><strong>BOYB 🍾</strong></p>
 
         <br>
+
         <p><strong>Scroll for more Information</strong></p>
       </div>
     </div>
@@ -123,7 +121,7 @@
       </div>
 
       <div class="right text-left">
-        <h1 class="dress-code-title">Dress Code</h1>
+        <h1>Dress Code</h1>
 
         <div class="highlight-box">
           You have been chosen to represent <strong>Dawn FM</strong>
@@ -134,11 +132,11 @@
           <li>Casual, comfort over beauty</li>
         </ul>
 
-        <br>
-        <p><strong>Kindly Note:</strong> The dress code should be represented by your top (t-shirt or dress). Bottoms/pants alone will not meet the requirement. Thank you for understanding.</p>
+        <p class="note-text"> <strong>Kindly Note:</strong> The dress code should be represented by your top (t-shirt or dress). Bottoms/pants alone will not meet the requirement. Thank you for understanding.</p>
         
         <br><br>
-        <p class="scroll-hint"><strong>Keep scrolling, I'm not done yet😊</strong></p>
+        
+        <p class="keep-scrolling"><strong>Keep scrolling, I'm not done yet😊</strong></p>
       </div>
     </div>
   </section>
@@ -149,31 +147,33 @@
       <div class="two-column">
         <div class="left text-left">
           <h1 class="big-contact">Contact Details</h1>
-          <p>Contact Nikita for more information, if you don't want to contact me.</p>
-          <p>Contact my mother-Koshnee for more information</p>
+          <p>Contact Nikita(Me) for more information.</p>
+          <p>If you don't want to contact me, contact my mother-Koshnee for more information.</p>
+        </div>
 
-          <br>
+        <div class="right text-left">
           <div class="contact-lines">
             <p class="contact-line">
-              <span class="label">Phone number</span><span class="colon">:</span>
+              <span class="label">Phone Number</span><span class="colon">:</span>
               <span class="value">0813270172</span>
             </p>
+
             <p class="contact-line">
               <span class="label">Koshnee's Number</span><span class="colon">:</span>
               <span class="value">0832269234</span>
             </p>
+
             <p class="contact-line">
               <span class="label">RSVP</span><span class="colon">:</span>
               <span class="value">There is none, you have to come😉</span>
             </p>
           </div>
-        </div>
 
-        <div class="right text-left">
-          <!-- Quiz Teaser Section -->
+          <br><br>
+
           <div class="quiz-teaser">
-            <h2 class="quiz-teaser-title">Find out what song you are from Dawn FM</h2>
-            <p class="quiz-teaser-sub">6 quick picks, soft reveal</p>
+            <h2 class="quiz-teaser-title">Find out what song you are from in <span class="quiz-album">DAWN FM</span></h2>
+            <p class="quiz-teaser-sub">Participate if you want</p>
             <button class="quiz-play-btn" id="openQuizBtn" type="button">Click to play</button>
           </div>
         </div>
@@ -185,67 +185,75 @@
     </footer>
   </section>
 
-  <!-- QUIZ OVERLAY (Like Kiss Land) -->
+  <!-- QUIZ OVERLAY -->
   <section id="pageQuiz" class="quiz-screen" aria-hidden="true">
     <div class="quiz-inner">
       <button class="quiz-back-btn" id="quizBackBtn" type="button">← Back to invite</button>
-      
-      <h1 class="quiz-title">Which Dawn FM song are you?</h1>
-      <p class="quiz-subtitle">6 questions. One result. <span class="quiz-album">Dawn FM</span> edition.</p>
-      
-      <form class="quiz-form" id="quizForm">
+
+      <h1 class="quiz-title">Which <span class="quiz-album">DAWN FM</span> song are you?</h1>
+      <p class="quiz-subtitle">6 quick picks. Soft reveal. Dawn FM vibes.</p>
+
+      <form id="quizForm" class="quiz-form" autocomplete="off">
         <div class="quiz-q">
-          <label for="guestName">Enter your name:</label>
-          <input type="text" id="guestName" name="guestName" class="quiz-name" placeholder="Your name" maxlength="30" required>
+          <h3>Your name</h3>
+          <input
+            id="guestName"
+            name="guestName"
+            type="text"
+            class="quiz-name"
+            placeholder="Type your name…"
+            maxlength="30"
+            required
+          />
         </div>
 
         <div class="quiz-q">
-          <h3>1. If you had to pick one guilty-pleasure snack at midnight, what is it?</h3>
-          <label><input type="radio" name="q1" value="how-do-i-make-you-love-me"> Chips + something spicy</label>
-          <label><input type="radio" name="q1" value="is-there-someone-else"> Ice cream straight from the tub</label>
-          <label><input type="radio" name="q1" value="less-than-zero"> Chocolate/Sweets</label>
-          <label><input type="radio" name="q1" value="moth-to-a-flame"> A sweet pastry / dessert</label>
-          <label><input type="radio" name="q1" value="sacrifice"> None of the above...I'm trying to be healthy</label>
+          <h3>1) If you had to pick one guilty-pleasure snack at midnight, what is it?</h3>
+          <label><input type="radio" name="q1" value="how-do-i-make-you-love-me"> Chips + something spicy.</label>
+          <label><input type="radio" name="q1" value="is-there-someone-else"> Ice cream straight from the tub.</label>
+          <label><input type="radio" name="q1" value="less-than-zero"> Chocolate/Sweets.</label>
+          <label><input type="radio" name="q1" value="moth-to-a-flame"> A sweet pastry / dessert.</label>
+          <label><input type="radio" name="q1" value="sacrifice"> None of the above...I'm trying to be healthy.</label>
         </div>
 
         <div class="quiz-q">
-          <h3>2. Which language would you love to learn just for fun?</h3>
-          <label><input type="radio" name="q2" value="how-do-i-make-you-love-me"> French</label>
-          <label><input type="radio" name="q2" value="is-there-someone-else"> Spanish</label>
-          <label><input type="radio" name="q2" value="less-than-zero"> Italian</label>
-          <label><input type="radio" name="q2" value="moth-to-a-flame"> Japanese</label>
-          <label><input type="radio" name="q2" value="sacrifice"> German</label>
+          <h3>2) Which language would you love to learn just for fun?</h3>
+          <label><input type="radio" name="q2" value="how-do-i-make-you-love-me"> French.</label>
+          <label><input type="radio" name="q2" value="is-there-someone-else"> Spanish.</label>
+          <label><input type="radio" name="q2" value="less-than-zero"> Italian.</label>
+          <label><input type="radio" name="q2" value="moth-to-a-flame"> Japanese.</label>
+          <label><input type="radio" name="q2" value="sacrifice"> German.</label>
         </div>
 
         <div class="quiz-q">
-          <h3>3. Favorite genre of music?</h3>
-          <label><input type="radio" name="q3" value="how-do-i-make-you-love-me"> Pop</label>
-          <label><input type="radio" name="q3" value="is-there-someone-else"> R&B</label>
-          <label><input type="radio" name="q3" value="less-than-zero"> 80's and 90's</label>
-          <label><input type="radio" name="q3" value="moth-to-a-flame"> Rap</label>
-          <label><input type="radio" name="q3" value="sacrifice"> Amapiano</label>
+          <h3>3) Favorite genre of music</h3>
+          <label><input type="radio" name="q3" value="how-do-i-make-you-love-me"> Pop.</label>
+          <label><input type="radio" name="q3" value="is-there-someone-else"> R&amp;B.</label>
+          <label><input type="radio" name="q3" value="less-than-zero"> 80's and 90's.</label>
+          <label><input type="radio" name="q3" value="moth-to-a-flame"> Rap.</label>
+          <label><input type="radio" name="q3" value="sacrifice"> Amapiano.</label>
         </div>
 
         <div class="quiz-q">
-          <h3>4. Which one of these places would you like to go to for vacation?</h3>
-          <label><input type="radio" name="q4" value="how-do-i-make-you-love-me"> Tokyo</label>
-          <label><input type="radio" name="q4" value="is-there-someone-else"> New York</label>
-          <label><input type="radio" name="q4" value="less-than-zero"> Rio</label>
-          <label><input type="radio" name="q4" value="moth-to-a-flame"> Paris</label>
-          <label><input type="radio" name="q4" value="sacrifice"> Italy</label>
+          <h3>4) Which one of these places would you like to go to for vacation?</h3>
+          <label><input type="radio" name="q4" value="how-do-i-make-you-love-me"> Tokyo.</label>
+          <label><input type="radio" name="q4" value="is-there-someone-else"> New York.</label>
+          <label><input type="radio" name="q4" value="less-than-zero"> Rio.</label>
+          <label><input type="radio" name="q4" value="moth-to-a-flame"> Paris.</label>
+          <label><input type="radio" name="q4" value="sacrifice"> Italy.</label>
         </div>
 
         <div class="quiz-q">
-          <h3>5. Pick a colour</h3>
-          <label><input type="radio" name="q5" value="how-do-i-make-you-love-me"> Black</label>
-          <label><input type="radio" name="q5" value="is-there-someone-else"> White</label>
-          <label><input type="radio" name="q5" value="less-than-zero"> Red</label>
-          <label><input type="radio" name="q5" value="moth-to-a-flame"> Blue</label>
-          <label><input type="radio" name="q5" value="sacrifice"> Yellow</label>
+          <h3>5) Pick a colour</h3>
+          <label><input type="radio" name="q5" value="how-do-i-make-you-love-me"> Black.</label>
+          <label><input type="radio" name="q5" value="is-there-someone-else"> White.</label>
+          <label><input type="radio" name="q5" value="less-than-zero"> Red.</label>
+          <label><input type="radio" name="q5" value="moth-to-a-flame"> Blue.</label>
+          <label><input type="radio" name="q5" value="sacrifice"> Yellow.</label>
         </div>
 
         <div class="quiz-q">
-          <h3>6. Pick a Dawn FM lyric</h3>
+          <h3>6) Pick a Dawn FM lyric</h3>
           <label><input type="radio" name="q6" value="how-do-i-make-you-love-me"> "I see the real you"</label>
           <label><input type="radio" name="q6" value="is-there-someone-else"> "Cause I wanna be with you forever"</label>
           <label><input type="radio" name="q6" value="less-than-zero"> "I try to fight, but I'd rather be free"</label>
@@ -253,23 +261,25 @@
           <label><input type="radio" name="q6" value="sacrifice"> "This life is still worth living"</label>
         </div>
 
-        <button type="button" class="quiz-finish-btn" id="quizFinishBtn">Reveal my song</button>
+        <button class="quiz-finish-btn" id="quizFinishBtn" type="button">Reveal my song</button>
       </form>
 
-      <div class="quiz-result" id="quizResult">
+      <div class="quiz-result" id="quizResult" aria-live="polite">
         <div class="quiz-result-inner fade-soft" id="quizResultInner"></div>
-        <img id="resultCover" class="result-cover fade-soft" alt="Song cover">
-        <p class="result-blurb" id="resultBlurb"></p>
+
+        <img id="resultCover" class="result-cover" alt="Song cover" />
+        <p id="resultBlurb" class="result-blurb"></p>
+
         <div class="quiz-result-actions">
-          <button type="button" class="quiz-retry-btn" id="quizRetryBtn">Try again</button>
-          <button type="button" class="quiz-close-btn" id="quizCloseBtn">Close</button>
+          <button class="quiz-retry-btn" id="quizRetryBtn" type="button">Try again</button>
+          <button class="quiz-close-btn" id="quizCloseBtn" type="button">Back to invite</button>
         </div>
-        <div class="quiz-overlay" id="quizOverlay"></div>
       </div>
+
+      <div class="quiz-overlay" id="quizOverlay"></div>
     </div>
   </section>
 
-  <!-- Audio -->
   <audio id="bgMusic" src="TakeMyBreath.mp3" preload="auto"></audio>
   <audio id="resultAudio" preload="auto"></audio>
 
